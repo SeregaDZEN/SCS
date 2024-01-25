@@ -1,7 +1,22 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.coroutines.EmptyCoroutineContext
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+fun main() {
+    CoroutineScope(EmptyCoroutineContext).launch {
+        CoroutineScope(EmptyCoroutineContext + SupervisorJob()).launch {
+            launch {
+                delay(1000)
+                println("ok") // <--
+            }
+            launch {
+                delay(500)
+                println("ok")
+            }
+            throw Exception("something bad happened")
+        }
+    }
+    Thread.sleep(1000)
 }
